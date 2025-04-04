@@ -1,0 +1,31 @@
+---
+title: "data_explore_sports"
+output: html_document
+date: "2025-04-04"
+---
+
+```{r load data}
+dir <- "/Users/mckennaquam/Desktop/DS 4420/ML4420_project/R_nn/nn_outputs/"
+df_predictions <- read.csv(paste0(dir, "sports_nn_results.csv"))
+
+```
+
+```{r get unique values}
+print(unique(df_predictions$predicted_labels))
+print(unique(df_predictions$test_labels))
+```
+
+
+```{r transform data}
+library(dplyr)
+
+total_counts <- df_predictions %>% count(test_labels) %>% rename(count_total = n)
+correct_counts <- df_predictions %>%
+  filter(predicted_labels == test_labels) %>%
+  count(predicted_labels) %>%
+  rename(count_correct = n) %>%
+  full_join(total_counts, by=join_by(predicted_labels == test_labels)) %>%
+  mutate(accuracy = count_correct / count_total * 100)
+  
+correct_counts
+```
