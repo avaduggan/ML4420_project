@@ -1,14 +1,16 @@
-# clear enviorment
+# clear environment
 rm(list = ls())
 
 library(dplyr)
 
+# set seed for reproducable results
 set.seed(42) # set seed
 
 dir <- ("/Users/mckennaquam/Desktop/DS 4420/ML4420_project/data/")
 df_athletics <- read.csv(paste0(dir, "athletics_cleaned.csv"))
 
-# hot 1 encode event catagories
+# data cleaned in python! (I couldnt get my sorting function to work in R)
+# hot 1 encode event categories
 events_for_prediction <- c("Short", "Mid", "Long", "Field", "Jump")
 # hot 1 encode our sports into separate columns and remove sport columns
 for (e in events_for_prediction) {
@@ -17,7 +19,7 @@ for (e in events_for_prediction) {
 df_athletics <- df_athletics %>% select(!event_catagory)
 
 
-# seperate features from output
+# separate features from output
 X <- df_athletics %>% select(Age, Height, Weight, Sex_M, Sex_F) 
 y <- df_athletics %>% select(events_for_prediction)
 
